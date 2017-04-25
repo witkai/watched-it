@@ -17,7 +17,7 @@ import com.github.witkai.watchedit.Entertainment;
 import com.github.witkai.watchedit.EntertainmentManager;
 import com.github.witkai.watchedit.R;
 import com.github.witkai.watchedit.data.EntertainmentDataSource;
-import com.github.witkai.watchedit.data.local.DbHelper;
+import com.github.witkai.watchedit.data.local.EntertainmentLocalDatasource;
 
 import java.util.List;
 
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(
                         MainActivity.this,
-                        AddMovieActivity.class);
+                        AddEntertainmentActivity.class);
                 startActivity(intent);
             }
         });
@@ -78,10 +78,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        EntertainmentDataSource dataManager = new DbHelper(getApplicationContext());
+        EntertainmentDataSource dataManager = EntertainmentLocalDatasource.getInstance(getApplicationContext());
         EntertainmentManager movieManager = new EntertainmentManager(dataManager);
         List<Entertainment> movies = movieManager.all();
-        RecyclerView.Adapter mAdapter = new MoviesAdapter(movies);
+        RecyclerView.Adapter mAdapter = new EntertainmentAdapter(movies);
         mMoviesList.setAdapter(mAdapter);
     }
 }

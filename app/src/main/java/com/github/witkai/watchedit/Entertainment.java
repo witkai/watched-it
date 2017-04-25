@@ -11,9 +11,8 @@ public class Entertainment {
     private Date watchedDate;
     private int rating;
 
-    public Entertainment(String title, Date watchedDate) {
+    public Entertainment(String title) {
         this.title = title;
-        this.watchedDate = watchedDate;
     }
 
     public String getTitle() {

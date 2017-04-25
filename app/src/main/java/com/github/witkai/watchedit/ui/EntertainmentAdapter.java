@@ -11,7 +11,7 @@ import com.github.witkai.watchedit.R;
 
 import java.util.List;
 
-public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHolder> {
+public class EntertainmentAdapter extends RecyclerView.Adapter<EntertainmentAdapter.MyViewHolder> {
 
     private List<Entertainment> moviesList;
 
@@ -25,7 +25,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
     }
 
 
-    public MoviesAdapter(List<Entertainment> moviesList) {
+    public EntertainmentAdapter(List<Entertainment> moviesList) {
         this.moviesList = moviesList;
     }
 

@@ -19,8 +19,7 @@ class PersistenceContract {
                         _ID + " INTEGER PRIMARY KEY," +
                         COLUMN_NAME_TITLE + " TEXT," +
                         COLUMN_NAME_TYPE + " INT," +
-                        COLUMN_NAME_COMMENT + "TEXT," +
-                        COLUMN_NAME_WATCHED_DATE + " INT" +
+                        COLUMN_NAME_COMMENT + " TEXT," +
                         COLUMN_NAME_RATING + " INT)";
         static final String SQL_DELETE_TABLE =
                 "DROP TABLE IF EXISTS " + TABLE_NAME;

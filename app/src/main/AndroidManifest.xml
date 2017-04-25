@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.github.witkai.watchedit.ui.AddMovieActivity"
+            android:name="com.github.witkai.watchedit.ui.AddEntertainmentActivity"
             android:label="Add Movie"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

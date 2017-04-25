@@ -13,14 +13,15 @@ import android.widget.EditText;
 
 import com.github.witkai.watchedit.Entertainment;
 import com.github.witkai.watchedit.EntertainmentManager;
+import com.github.witkai.watchedit.EntertainmentType;
 import com.github.witkai.watchedit.R;
 import com.github.witkai.watchedit.data.EntertainmentDataSource;
-import com.github.witkai.watchedit.data.local.DbHelper;
+import com.github.witkai.watchedit.data.local.EntertainmentLocalDatasource;
 
 import java.util.Calendar;
 import java.util.Date;
 
-public class AddMovieActivity extends AppCompatActivity {
+public class AddEntertainmentActivity extends AppCompatActivity {
 
     private EditText mTitle;
     private CalendarView mCalendarView;
@@ -79,9 +80,13 @@ public class AddMovieActivity extends AppCompatActivity {
     private void saveMovie() {
         String title = mTitle.getText().toString();
         Date watchedDate = new Date(mCalendarView.getDate());
-        Entertainment movie = new Entertainment(title, watchedDate);
-        EntertainmentDataSource dataManager = new DbHelper(this);
+
+        Entertainment entertainment = new Entertainment(title);
+        entertainment.setType(EntertainmentType.MOVIE);
+        entertainment.setWatchedDate(watchedDate);
+
+        EntertainmentDataSource dataManager = EntertainmentLocalDatasource.getInstance(this);
         EntertainmentManager movieManager = new EntertainmentManager(dataManager);
-        movieManager.add(movie);
+        movieManager.add(entertainment);
     }
 }

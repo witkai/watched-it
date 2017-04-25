@@ -4,12 +4,13 @@ import org.junit.Test;
 
 import java.util.Date;
 
-public class MovieTest {
+public class EntertainmentTest {
 
     @Test
     public void createNew() {
         String title = "Test";
         Date watchedDate = new Date();
-        new Entertainment(title, watchedDate);
+        Entertainment entertainment = new Entertainment(title);
+        entertainment.setWatchedDate(watchedDate);
     }
 }
