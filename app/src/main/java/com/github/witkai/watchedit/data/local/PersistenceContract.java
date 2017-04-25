@@ -12,7 +12,6 @@ class PersistenceContract {
         static final String COLUMN_NAME_TITLE = "title";
         static final String COLUMN_NAME_TYPE = "type";
         static final String COLUMN_NAME_COMMENT = "comment";
-        static final String COLUMN_NAME_WATCHED_DATE = "watched_date";
         static final String COLUMN_NAME_RATING = "rating";
         static final String SQL_CREATE_TABLE =
                 "CREATE TABLE " + TABLE_NAME + " (" +

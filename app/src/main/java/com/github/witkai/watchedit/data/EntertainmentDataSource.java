@@ -11,7 +11,7 @@ public interface EntertainmentDataSource {
 
     void addEntertainment(@NonNull Entertainment entertainment);
 
-    void addWatchedDate(long movieId, @NonNull Date date);
+    void addWatchedDate(@NonNull Long movieId, @NonNull Date date);
 
     List<Entertainment> allEntertainments();
 }

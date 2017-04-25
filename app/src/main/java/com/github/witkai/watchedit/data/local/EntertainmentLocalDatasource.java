@@ -14,10 +14,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static android.R.attr.rating;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class EntertainmentLocalDatasource implements EntertainmentDataSource{
+public class EntertainmentLocalDatasource implements EntertainmentDataSource {
 
     private static final String TAG = EntertainmentLocalDatasource.class.getSimpleName();
 
@@ -25,7 +24,6 @@ public class EntertainmentLocalDatasource implements EntertainmentDataSource{
 
     private DbHelper mDbHelper;
 
-    // Prevent direct instantiation.
     private EntertainmentLocalDatasource(@NonNull Context context) {
         checkNotNull(context);
         mDbHelper = new DbHelper(context);
@@ -75,20 +73,26 @@ public class EntertainmentLocalDatasource implements EntertainmentDataSource{
     }
 
     @Override
-    public void addWatchedDate(long movieId, @NonNull Date date) {
+    public void addWatchedDate(@NonNull Long movieId, @NonNull Date date) {
 
     }
 
     @Override
     public List<Entertainment> allEntertainments() {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
-        String query = "select * from " + PersistenceContract.EntertainmentTable.TABLE_NAME;
-        String[] args = {  };
+        String entertainmentTableName = PersistenceContract.EntertainmentTable.TABLE_NAME;
+        String watchedDateTableName = PersistenceContract.WatchedDateTable.TABLE_NAME;
+        String query = "select e.title,e.type,e.comment,e.rating,d.date from "
+                + "FROM" + entertainmentTableName + " e"
+                + " INNER JOIN " + watchedDateTableName + " d"
+                + " ON e._ID = d." + PersistenceContract.WatchedDateTable.COLUMN_NAME_ENTERTAINMENT_ID
+                + " ORDER BY d.date DESC";
+        String[] args = {};
         Cursor cursor = db.rawQuery(query, args);
 
         List<Entertainment> entertainments = new ArrayList<>();
 
-        while(cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
             String title = cursor.getString(
                     cursor.getColumnIndexOrThrow(
                             PersistenceContract.EntertainmentTable.COLUMN_NAME_TITLE));
@@ -98,8 +102,9 @@ public class EntertainmentLocalDatasource implements EntertainmentDataSource{
             String comment = cursor.getString(
                     cursor.getColumnIndexOrThrow(
                             PersistenceContract.EntertainmentTable.COLUMN_NAME_COMMENT));
-//            long watchedDate = cursor.getLong(
-//                    cursor.getColumnIndexOrThrow(PersistenceContract.EntertainmentTable.COLUMN_NAME_WATCHED_DATE));
+            long watchedDate = cursor.getLong(
+                    cursor.getColumnIndexOrThrow(
+                            PersistenceContract.WatchedDateTable.COLUMN_NAME_DATE));
             int rating = cursor.getInt(
                     cursor.getColumnIndexOrThrow(
                             PersistenceContract.EntertainmentTable.COLUMN_NAME_RATING));
@@ -108,6 +113,7 @@ public class EntertainmentLocalDatasource implements EntertainmentDataSource{
             entertainment.setType(type);
             entertainment.setRating(rating);
             entertainment.setComment(comment);
+            entertainment.setWatchedDate(new Date(watchedDate));
 
             entertainments.add(entertainment);
         }
@@ -116,54 +122,4 @@ public class EntertainmentLocalDatasource implements EntertainmentDataSource{
 
         return entertainments;
     }
-
-    public List<Entertainment> allEntertainmentsOld() {
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                PersistenceContract.EntertainmentTable._ID,
-                PersistenceContract.EntertainmentTable.COLUMN_NAME_TITLE,
-                PersistenceContract.EntertainmentTable.COLUMN_NAME_RATING
-        };
-
-        // Filter results WHERE "title" = 'My Title'
-        String selection = PersistenceContract.EntertainmentTable.COLUMN_NAME_TITLE + " = ?";
-        String[] selectionArgs = {"My Title"};
-
-        // How you want the results sorted in the resulting Cursor
-        String sortOrder =
-                PersistenceContract.EntertainmentTable.COLUMN_NAME_WATCHED_DATE + " DESC";
-
-        Cursor cursor = db.query(
-                PersistenceContract.EntertainmentTable.TABLE_NAME,          // The table to query
-                projection,                               // The columns to return
-                null,                                // The columns for the WHERE clause
-                null,                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                sortOrder                                 // The sort order
-        );
-
-        List<Entertainment> movies = new ArrayList<>();
-        while(cursor.moveToNext()) {
-            String title = cursor.getString(
-                    cursor.getColumnIndexOrThrow(PersistenceContract.EntertainmentTable.COLUMN_NAME_TITLE));
-            long watchedDate = cursor.getLong(
-                    cursor.getColumnIndexOrThrow(PersistenceContract.EntertainmentTable.COLUMN_NAME_WATCHED_DATE));
-//            int rating = cursor.getInt(
-//                    cursor.getColumnIndexOrThrow(PersistenceContract.Entertainment.COLUMN_NAME_RATING));
-
-            Entertainment movie = new Entertainment(title);
-            movie.setRating(rating);
-
-            movies.add(movie);
-        }
-
-        cursor.close();
-
-        return movies;
-    }
-
 }

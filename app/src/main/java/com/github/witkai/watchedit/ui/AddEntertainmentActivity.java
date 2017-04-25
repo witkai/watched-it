@@ -12,7 +12,6 @@ import android.widget.CalendarView;
 import android.widget.EditText;
 
 import com.github.witkai.watchedit.Entertainment;
-import com.github.witkai.watchedit.EntertainmentManager;
 import com.github.witkai.watchedit.EntertainmentType;
 import com.github.witkai.watchedit.R;
 import com.github.witkai.watchedit.data.EntertainmentDataSource;
@@ -21,10 +20,13 @@ import com.github.witkai.watchedit.data.local.EntertainmentLocalDatasource;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.github.witkai.watchedit.R.id.calendarView;
+
 public class AddEntertainmentActivity extends AppCompatActivity {
 
     private EditText mTitle;
     private CalendarView mCalendarView;
+    private long mSelectedDate = Calendar.getInstance().getTimeInMillis();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,20 +75,27 @@ public class AddEntertainmentActivity extends AppCompatActivity {
     }
 
     private void setupCalendar() {
-        mCalendarView = (CalendarView) findViewById(R.id.calendarView);
+        mCalendarView = (CalendarView) findViewById(calendarView);
         mCalendarView.setMaxDate(Calendar.getInstance().getTimeInMillis());
+        mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month,
+                                            int dayOfMonth) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, dayOfMonth);
+                mSelectedDate = calendar.getTimeInMillis();
+            }
+        });
     }
 
     private void saveMovie() {
         String title = mTitle.getText().toString();
-        Date watchedDate = new Date(mCalendarView.getDate());
 
         Entertainment entertainment = new Entertainment(title);
         entertainment.setType(EntertainmentType.MOVIE);
-        entertainment.setWatchedDate(watchedDate);
+        entertainment.setWatchedDate(new Date(mSelectedDate));
 
-        EntertainmentDataSource dataManager = EntertainmentLocalDatasource.getInstance(this);
-        EntertainmentManager movieManager = new EntertainmentManager(dataManager);
-        movieManager.add(entertainment);
+        EntertainmentDataSource dataSource = EntertainmentLocalDatasource.getInstance(this);
+        dataSource.addEntertainment(entertainment);
     }
 }

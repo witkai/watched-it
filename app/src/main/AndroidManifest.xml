@@ -19,7 +19,7 @@
         </activity>
         <activity
             android:name="com.github.witkai.watchedit.ui.AddEntertainmentActivity"
-            android:label="Add Movie"
+            android:label="Add"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

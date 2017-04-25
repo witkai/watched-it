@@ -9,16 +9,22 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.witkai.watchedit.Entertainment;
-import com.github.witkai.watchedit.EntertainmentManager;
 import com.github.witkai.watchedit.R;
 import com.github.witkai.watchedit.data.EntertainmentDataSource;
 import com.github.witkai.watchedit.data.local.EntertainmentLocalDatasource;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -73,15 +79,70 @@ public class MainActivity extends AppCompatActivity {
         mMoviesList = (RecyclerView) findViewById(R.id.moviesList);
         mMoviesList.setHasFixedSize(true);
         mMoviesList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        mMoviesList.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        mMoviesList.addItemDecoration(
+                new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         mMoviesList.setItemAnimator(new DefaultItemAnimator());
     }
 
     private void loadData() {
-        EntertainmentDataSource dataManager = EntertainmentLocalDatasource.getInstance(getApplicationContext());
-        EntertainmentManager movieManager = new EntertainmentManager(dataManager);
-        List<Entertainment> movies = movieManager.all();
+        EntertainmentDataSource datasource =
+                EntertainmentLocalDatasource.getInstance(getApplicationContext());
+        List<Entertainment> movies = datasource.allEntertainments();
         RecyclerView.Adapter mAdapter = new EntertainmentAdapter(movies);
         mMoviesList.setAdapter(mAdapter);
+    }
+
+    static class EntertainmentAdapter extends RecyclerView.Adapter<EntertainmentAdapter.MyViewHolder> {
+
+        private List<Entertainment> moviesList;
+        private Date mLastYear;
+        private DateFormat mShortDateFormat;
+
+        class MyViewHolder extends RecyclerView.ViewHolder {
+            public TextView title, date;
+
+            MyViewHolder(View view) {
+                super(view);
+                title = (TextView) view.findViewById(R.id.title);
+                date = (TextView) view.findViewById(R.id.date);
+            }
+        }
+
+        EntertainmentAdapter(List<Entertainment> moviesList) {
+            this.moviesList = moviesList;
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.MONTH, -6);
+            mLastYear = c.getTime();
+            mShortDateFormat = new SimpleDateFormat("MMM dd");
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.movie_list_row, parent, false);
+            return new MyViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(MyViewHolder holder, int position) {
+            Entertainment entertainment = moviesList.get(position);
+            holder.title.setText(entertainment.getTitle());
+            holder.date.setText(formatDate(entertainment.getWatchedDate()));
+        }
+
+        @Override
+        public int getItemCount() {
+            return moviesList.size();
+        }
+
+        private String formatDate(Date date) {
+            String formattedDate;
+            if (date.after(mLastYear)) {
+                formattedDate = mShortDateFormat.format(date);
+            } else {
+                formattedDate = SimpleDateFormat.getDateInstance().format(date);
+            }
+            return formattedDate;
+        }
     }
 }
