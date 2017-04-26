@@ -7,9 +7,9 @@ public class Entertainment {
     private Long id;
     private String title;
     private int type;
-    private String comment;
+    private String note;
     private Date watchedDate;
-    private int rating;
+    private float rating;
 
     public Entertainment(String title) {
         this.title = title;
@@ -31,11 +31,11 @@ public class Entertainment {
         this.watchedDate = watchedDate;
     }
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 
@@ -55,11 +55,11 @@ public class Entertainment {
         this.type = type;
     }
 
-    public String getComment() {
-        return comment;
+    public String getNote() {
+        return note;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setNote(String note) {
+        this.note = note;
     }
 }

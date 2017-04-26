@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.github.witkai.watchedit.Entertainment;
@@ -99,12 +100,15 @@ public class MainActivity extends AppCompatActivity {
         private DateFormat mShortDateFormat;
 
         class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView title, date;
+            TextView title, date, type;
+            RatingBar rating;
 
             MyViewHolder(View view) {
                 super(view);
                 title = (TextView) view.findViewById(R.id.title);
                 date = (TextView) view.findViewById(R.id.date);
+                rating = (RatingBar) view.findViewById(R.id.rating);
+                type = (TextView) view.findViewById(R.id.type);
             }
         }
 
@@ -128,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
             Entertainment entertainment = moviesList.get(position);
             holder.title.setText(entertainment.getTitle());
             holder.date.setText(formatDate(entertainment.getWatchedDate()));
+            holder.rating.setRating(entertainment.getRating());
         }
 
         @Override

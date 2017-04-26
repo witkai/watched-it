@@ -10,6 +10,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.RatingBar;
+import android.widget.Spinner;
 
 import com.github.witkai.watchedit.Entertainment;
 import com.github.witkai.watchedit.EntertainmentType;
@@ -26,6 +28,9 @@ public class AddEntertainmentActivity extends AppCompatActivity {
 
     private EditText mTitle;
     private CalendarView mCalendarView;
+    private Spinner mTypeSpinner;
+    private RatingBar mRatingBar;
+    private EditText mNotes;
     private long mSelectedDate = Calendar.getInstance().getTimeInMillis();
 
     @Override
@@ -33,6 +38,9 @@ public class AddEntertainmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_movie);
         mTitle = (EditText) findViewById(R.id.titleEdit);
+        mTypeSpinner = (Spinner) findViewById(R.id.typeSpinner);
+        mRatingBar = (RatingBar) findViewById(R.id.ratingBar);
+        mNotes = (EditText) findViewById(R.id.notesText);
         setupToolbar();
         setupCalendar();
     }
@@ -89,11 +97,13 @@ public class AddEntertainmentActivity extends AppCompatActivity {
     }
 
     private void saveMovie() {
-        String title = mTitle.getText().toString();
+        int type = mTypeSpinner.getSelectedItemPosition();
 
-        Entertainment entertainment = new Entertainment(title);
+        Entertainment entertainment = new Entertainment(mTitle.getText().toString());
         entertainment.setType(EntertainmentType.MOVIE);
         entertainment.setWatchedDate(new Date(mSelectedDate));
+        entertainment.setNote(mNotes.getText().toString());
+        entertainment.setRating(mRatingBar.getRating());
 
         EntertainmentDataSource dataSource = EntertainmentLocalDatasource.getInstance(this);
         dataSource.addEntertainment(entertainment);

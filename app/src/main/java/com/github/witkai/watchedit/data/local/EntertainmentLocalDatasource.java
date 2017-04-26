@@ -48,8 +48,8 @@ public class EntertainmentLocalDatasource implements EntertainmentDataSource {
                 PersistenceContract.EntertainmentTable.COLUMN_NAME_TYPE,
                 entertainment.getType());
         values.put(
-                PersistenceContract.EntertainmentTable.COLUMN_NAME_COMMENT,
-                entertainment.getComment());
+                PersistenceContract.EntertainmentTable.COLUMN_NAME_NOTE,
+                entertainment.getNote());
         values.put(
                 PersistenceContract.EntertainmentTable.COLUMN_NAME_RATING,
                 entertainment.getRating());
@@ -82,8 +82,8 @@ public class EntertainmentLocalDatasource implements EntertainmentDataSource {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         String entertainmentTableName = PersistenceContract.EntertainmentTable.TABLE_NAME;
         String watchedDateTableName = PersistenceContract.WatchedDateTable.TABLE_NAME;
-        String query = "select e.title,e.type,e.comment,e.rating,d.date from "
-                + "FROM" + entertainmentTableName + " e"
+        String query = "SELECT e.title,e.type,e.rating,d.date"
+                + " FROM " + entertainmentTableName + " e"
                 + " INNER JOIN " + watchedDateTableName + " d"
                 + " ON e._ID = d." + PersistenceContract.WatchedDateTable.COLUMN_NAME_ENTERTAINMENT_ID
                 + " ORDER BY d.date DESC";
@@ -99,20 +99,16 @@ public class EntertainmentLocalDatasource implements EntertainmentDataSource {
             int type = cursor.getInt(
                     cursor.getColumnIndexOrThrow(
                             PersistenceContract.EntertainmentTable.COLUMN_NAME_TYPE));
-            String comment = cursor.getString(
-                    cursor.getColumnIndexOrThrow(
-                            PersistenceContract.EntertainmentTable.COLUMN_NAME_COMMENT));
             long watchedDate = cursor.getLong(
                     cursor.getColumnIndexOrThrow(
                             PersistenceContract.WatchedDateTable.COLUMN_NAME_DATE));
-            int rating = cursor.getInt(
+            float rating = cursor.getFloat(
                     cursor.getColumnIndexOrThrow(
                             PersistenceContract.EntertainmentTable.COLUMN_NAME_RATING));
 
             Entertainment entertainment = new Entertainment(title);
             entertainment.setType(type);
             entertainment.setRating(rating);
-            entertainment.setComment(comment);
             entertainment.setWatchedDate(new Date(watchedDate));
 
             entertainments.add(entertainment);

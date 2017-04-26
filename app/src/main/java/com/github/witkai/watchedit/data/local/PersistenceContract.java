@@ -11,15 +11,15 @@ class PersistenceContract {
         static final String TABLE_NAME = "entertainment";
         static final String COLUMN_NAME_TITLE = "title";
         static final String COLUMN_NAME_TYPE = "type";
-        static final String COLUMN_NAME_COMMENT = "comment";
+        static final String COLUMN_NAME_NOTE = "note";
         static final String COLUMN_NAME_RATING = "rating";
         static final String SQL_CREATE_TABLE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
                         _ID + " INTEGER PRIMARY KEY," +
                         COLUMN_NAME_TITLE + " TEXT," +
                         COLUMN_NAME_TYPE + " INT," +
-                        COLUMN_NAME_COMMENT + " TEXT," +
-                        COLUMN_NAME_RATING + " INT)";
+                        COLUMN_NAME_NOTE + " TEXT," +
+                        COLUMN_NAME_RATING + " REAL)";
         static final String SQL_DELETE_TABLE =
                 "DROP TABLE IF EXISTS " + TABLE_NAME;
     }

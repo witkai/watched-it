@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Watched It</string>
     <string name="action_settings">Settings</string>
+    <string-array name="types_array">
+        <item>Movie</item>
+        <item>TV Show</item>
+        <item>Concert</item>
+        <item>Show</item>
+        <item>Play</item>
+        <item>Comedy</item>
+    </string-array>
 </resources>
