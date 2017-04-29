@@ -1,4 +1,4 @@
-package com.github.witkai.watchedit.ui;
+package com.github.witkai.watchedit.ui.list;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +23,7 @@ import com.github.witkai.watchedit.EntertainmentType;
 import com.github.witkai.watchedit.R;
 import com.github.witkai.watchedit.data.EntertainmentDataSource;
 import com.github.witkai.watchedit.data.local.EntertainmentLocalDatasource;
+import com.github.witkai.watchedit.ui.add.AddEntertainmentActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -30,14 +31,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class ListEntertainmentsActivity extends AppCompatActivity {
 
     private RecyclerView mMoviesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_list);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         setupAddFab();
         setupMoviesList();
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(
-                        MainActivity.this,
+                        ListEntertainmentsActivity.this,
                         AddEntertainmentActivity.class);
                 startActivity(intent);
             }
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.movie_list_row, parent, false);
+                    .inflate(R.layout.list_row, parent, false);
 
             return new MyViewHolder(itemView);
         }

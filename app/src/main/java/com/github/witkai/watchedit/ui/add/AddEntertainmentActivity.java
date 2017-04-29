@@ -1,4 +1,4 @@
-package com.github.witkai.watchedit.ui;
+package com.github.witkai.watchedit.ui.add;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
