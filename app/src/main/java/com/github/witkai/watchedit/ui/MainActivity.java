@@ -2,6 +2,7 @@ package com.github.witkai.watchedit.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -18,6 +19,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.github.witkai.watchedit.Entertainment;
+import com.github.witkai.watchedit.EntertainmentType;
 import com.github.witkai.watchedit.R;
 import com.github.witkai.watchedit.data.EntertainmentDataSource;
 import com.github.witkai.watchedit.data.local.EntertainmentLocalDatasource;
@@ -124,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.movie_list_row, parent, false);
+
             return new MyViewHolder(itemView);
         }
 
@@ -133,6 +136,23 @@ public class MainActivity extends AppCompatActivity {
             holder.title.setText(entertainment.getTitle());
             holder.date.setText(formatDate(entertainment.getWatchedDate()));
             holder.rating.setRating(entertainment.getRating());
+            holder.type.setText(getType(entertainment));
+        }
+
+        @Nullable
+        private String getType(Entertainment entertainment) {
+            String type;
+            switch (entertainment.getType()) {
+                case EntertainmentType.MOVIE:
+                    type = "Movie";
+                    break;
+                case EntertainmentType.TV_SHOW:
+                    type = "TV Show";
+                    break;
+                default:
+                    type = null;
+            }
+            return type;
         }
 
         @Override

@@ -10,8 +10,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RatingBar;
-import android.widget.Spinner;
 
 import com.github.witkai.watchedit.Entertainment;
 import com.github.witkai.watchedit.EntertainmentType;
@@ -28,7 +28,8 @@ public class AddEntertainmentActivity extends AppCompatActivity {
 
     private EditText mTitle;
     private CalendarView mCalendarView;
-    private Spinner mTypeSpinner;
+    private RadioButton mMovieType;
+    private RadioButton mTvShowType;
     private RatingBar mRatingBar;
     private EditText mNotes;
     private long mSelectedDate = Calendar.getInstance().getTimeInMillis();
@@ -38,9 +39,10 @@ public class AddEntertainmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_movie);
         mTitle = (EditText) findViewById(R.id.titleEdit);
-        mTypeSpinner = (Spinner) findViewById(R.id.typeSpinner);
         mRatingBar = (RatingBar) findViewById(R.id.ratingBar);
         mNotes = (EditText) findViewById(R.id.notesText);
+        mMovieType = (RadioButton) findViewById(R.id.movieType);
+        mTvShowType = (RadioButton) findViewById(R.id.tvShowType);
         setupToolbar();
         setupCalendar();
     }
@@ -97,13 +99,17 @@ public class AddEntertainmentActivity extends AppCompatActivity {
     }
 
     private void saveMovie() {
-        int type = mTypeSpinner.getSelectedItemPosition();
 
         Entertainment entertainment = new Entertainment(mTitle.getText().toString());
-        entertainment.setType(EntertainmentType.MOVIE);
         entertainment.setWatchedDate(new Date(mSelectedDate));
         entertainment.setNote(mNotes.getText().toString());
         entertainment.setRating(mRatingBar.getRating());
+
+        if (mMovieType.isChecked()) {
+            entertainment.setType(EntertainmentType.MOVIE);
+        } else if (mTvShowType.isChecked()) {
+            entertainment.setType(EntertainmentType.TV_SHOW);
+        }
 
         EntertainmentDataSource dataSource = EntertainmentLocalDatasource.getInstance(this);
         dataSource.addEntertainment(entertainment);

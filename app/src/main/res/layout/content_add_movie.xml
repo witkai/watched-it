@@ -11,8 +11,10 @@
     tools:showIn="@layout/activity_add_movie">
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <LinearLayout
             android:layout_width="368dp"
@@ -29,8 +31,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Title"
-                android:inputType="textAutoComplete" />
+                android:hint="@string/label_title"
+                android:inputType="textCapWords|textAutoCorrect|textAutoComplete" />
 
 
             <TextView
@@ -39,13 +41,35 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/formTopPadding"
                 android:layout_weight="1"
-                android:text="Type" />
+                android:text="@string/label_type" />
 
-            <Spinner
-                android:id="@+id/typeSpinner"
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/movieType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/type_movie" />
+
+                <RadioButton
+                    android:id="@+id/tvShowType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/type_tv_show" />
+            </RadioGroup>
+
+            <EditText
+                android:id="@+id/editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="date" />
 
             <TextView
                 android:id="@+id/calendarLabel"
@@ -53,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/formTopPadding"
                 android:layout_weight="1"
-                android:text="Date watched" />
+                android:text="@string/label_date_watched" />
 
             <CalendarView
                 android:id="@+id/calendarView"
@@ -67,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/formTopPadding"
                 android:layout_weight="1"
-                android:text="Rating" />
+                android:text="@string/label_rating" />
 
             <RatingBar
                 android:id="@+id/ratingBar"
@@ -82,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/formTopPadding"
                 android:layout_weight="1"
-                android:text="Notes" />
+                android:text="@string/label_notes" />
 
             <EditText
                 android:id="@+id/notesText"
@@ -90,7 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine|textCapWords|textAutoCorrect|textAutoComplete" />
         </LinearLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>
