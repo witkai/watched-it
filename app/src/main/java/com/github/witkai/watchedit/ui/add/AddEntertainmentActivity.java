@@ -99,19 +99,21 @@ public class AddEntertainmentActivity extends AppCompatActivity {
     }
 
     private void saveMovie() {
+        String title = mTitle.getText().toString();
+        if (title.length() > 0) {
+            Entertainment entertainment = new Entertainment(title);
+            entertainment.setWatchedDate(new Date(mSelectedDate));
+            entertainment.setNote(mNotes.getText().toString());
+            entertainment.setRating(mRatingBar.getRating());
 
-        Entertainment entertainment = new Entertainment(mTitle.getText().toString());
-        entertainment.setWatchedDate(new Date(mSelectedDate));
-        entertainment.setNote(mNotes.getText().toString());
-        entertainment.setRating(mRatingBar.getRating());
+            if (mMovieType.isChecked()) {
+                entertainment.setType(EntertainmentType.MOVIE);
+            } else if (mTvShowType.isChecked()) {
+                entertainment.setType(EntertainmentType.TV_SHOW);
+            }
 
-        if (mMovieType.isChecked()) {
-            entertainment.setType(EntertainmentType.MOVIE);
-        } else if (mTvShowType.isChecked()) {
-            entertainment.setType(EntertainmentType.TV_SHOW);
+            EntertainmentDataSource dataSource = EntertainmentLocalDatasource.getInstance(this);
+            dataSource.addEntertainment(entertainment);
         }
-
-        EntertainmentDataSource dataSource = EntertainmentLocalDatasource.getInstance(this);
-        dataSource.addEntertainment(entertainment);
     }
 }
