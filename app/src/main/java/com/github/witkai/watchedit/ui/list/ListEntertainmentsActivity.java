@@ -1,9 +1,13 @@
 package com.github.witkai.watchedit.ui.list;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
@@ -61,10 +65,10 @@ public class ListEntertainmentsActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
+            showAboutDialog();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -101,6 +105,27 @@ public class ListEntertainmentsActivity
         List<Entertainment> movies = datasource.allEntertainments();
         RecyclerView.Adapter mAdapter = new EntertainmentAdapter(movies);
         mMoviesList.setAdapter(mAdapter);
+    }
+
+    private void showAboutDialog() {
+        String version;
+        try {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            version = packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            version = "";
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_about, null);
+        TextView versionText = (TextView) view.findViewById(R.id.version);
+        versionText.setText("Version: " + version);
+        builder.setView(view);
+        builder.setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        builder.create().show();
     }
 
     static class EntertainmentAdapter

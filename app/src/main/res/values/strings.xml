@@ -8,6 +8,7 @@
     <string name="label_date_watched">Date watched</string>
     <string name="label_rating">Rating</string>
     <string name="label_notes">Notes</string>
+    <string name="close">Close</string>
     <string-array name="types_array">
         <item>Movie</item>
         <item>TV Show</item>
