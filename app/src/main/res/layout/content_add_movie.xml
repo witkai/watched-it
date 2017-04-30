@@ -34,15 +34,6 @@
                 android:hint="@string/label_title"
                 android:inputType="textCapWords|textAutoCorrect|textAutoComplete" />
 
-
-            <TextView
-                android:id="@+id/typeLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/formTopPadding"
-                android:layout_weight="1"
-                android:text="@string/label_type" />
-
             <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -62,14 +53,6 @@
                     android:layout_weight="1"
                     android:text="@string/type_tv_show" />
             </RadioGroup>
-
-            <EditText
-                android:id="@+id/editText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="date" />
 
             <TextView
                 android:id="@+id/calendarLabel"

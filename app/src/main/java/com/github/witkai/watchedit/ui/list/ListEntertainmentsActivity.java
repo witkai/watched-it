@@ -31,7 +31,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class ListEntertainmentsActivity extends AppCompatActivity {
+public class ListEntertainmentsActivity
+        extends AppCompatActivity
+        implements EntertainmentsNavigator {
 
     private RecyclerView mMoviesList;
 
@@ -52,7 +54,7 @@ public class ListEntertainmentsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_list, menu);
         return true;
     }
 
@@ -66,15 +68,20 @@ public class ListEntertainmentsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void addNewEntertainment() {
+        Intent intent = new Intent(
+                ListEntertainmentsActivity.this,
+                AddEntertainmentActivity.class);
+        startActivity(intent);
+    }
+
     private void setupAddFab() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(
-                        ListEntertainmentsActivity.this,
-                        AddEntertainmentActivity.class);
-                startActivity(intent);
+                addNewEntertainment();
             }
         });
     }
@@ -96,24 +103,12 @@ public class ListEntertainmentsActivity extends AppCompatActivity {
         mMoviesList.setAdapter(mAdapter);
     }
 
-    static class EntertainmentAdapter extends RecyclerView.Adapter<EntertainmentAdapter.MyViewHolder> {
+    static class EntertainmentAdapter
+            extends RecyclerView.Adapter<EntertainmentAdapter.RowViewHolder> {
 
         private List<Entertainment> moviesList;
         private Date mLastYear;
         private DateFormat mShortDateFormat;
-
-        class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView title, date, type;
-            RatingBar rating;
-
-            MyViewHolder(View view) {
-                super(view);
-                title = (TextView) view.findViewById(R.id.title);
-                date = (TextView) view.findViewById(R.id.date);
-                rating = (RatingBar) view.findViewById(R.id.rating);
-                type = (TextView) view.findViewById(R.id.type);
-            }
-        }
 
         EntertainmentAdapter(List<Entertainment> moviesList) {
             this.moviesList = moviesList;
@@ -124,15 +119,15 @@ public class ListEntertainmentsActivity extends AppCompatActivity {
         }
 
         @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public RowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_row, parent, false);
 
-            return new MyViewHolder(itemView);
+            return new RowViewHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
+        public void onBindViewHolder(RowViewHolder holder, int position) {
             Entertainment entertainment = moviesList.get(position);
             holder.title.setText(entertainment.getTitle());
             holder.date.setText(formatDate(entertainment.getWatchedDate()));
@@ -145,6 +140,7 @@ public class ListEntertainmentsActivity extends AppCompatActivity {
             String type;
             switch (entertainment.getType()) {
                 case EntertainmentType.MOVIE:
+                    // TODO - use string resource
                     type = "Movie";
                     break;
                 case EntertainmentType.TV_SHOW:
@@ -161,6 +157,7 @@ public class ListEntertainmentsActivity extends AppCompatActivity {
             return moviesList.size();
         }
 
+        // TODO - extract into external class
         private String formatDate(Date date) {
             String formattedDate;
             if (date.after(mLastYear)) {
@@ -169,6 +166,32 @@ public class ListEntertainmentsActivity extends AppCompatActivity {
                 formattedDate = SimpleDateFormat.getDateInstance().format(date);
             }
             return formattedDate;
+        }
+
+        class RowViewHolder
+                extends RecyclerView.ViewHolder
+                implements View.OnClickListener, EntertainmentItemNavigator {
+
+            TextView title, date, type;
+            RatingBar rating;
+
+            RowViewHolder(View view) {
+                super(view);
+                title = (TextView) view.findViewById(R.id.title);
+                date = (TextView) view.findViewById(R.id.date);
+                rating = (RatingBar) view.findViewById(R.id.rating);
+                type = (TextView) view.findViewById(R.id.type);
+            }
+
+            @Override
+            public void onClick(View v) {
+                openEntertainmentDetail(getItemId());
+            }
+
+            @Override
+            public void openEntertainmentDetail(long id) {
+                // TODO
+            }
         }
     }
 }
