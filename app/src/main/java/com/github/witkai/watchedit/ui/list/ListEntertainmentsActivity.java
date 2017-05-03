@@ -43,7 +43,6 @@ public class ListEntertainmentsActivity
 
     private static final String TAG = ListEntertainmentsActivity.class.getSimpleName();
     private RecyclerView mMoviesList;
-    private int i = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,30 +72,9 @@ public class ListEntertainmentsActivity
             showAboutDialog();
             return true;
         } else if (id == R.id.action_import) {
-            try {
-                InputStream inputStream = getResources().openRawResource(R.raw.movies);
-                CSVFile csvFile = new CSVFile(inputStream);
-                List<String[]> moviesList = csvFile.read();
-                DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-                EntertainmentDataSource dataSource = EntertainmentLocalDatasource.getInstance(this);
-                for (String[] row : moviesList) {
-                    Date watchedDate = formatter.parse(row[0]);
-                    String title = row[1];
-                    Float rating = Float.parseFloat(row[3]);
-                    Entertainment entertainment = new Entertainment(title);
-                    entertainment.setType(EntertainmentType.MOVIE);
-                    entertainment.setWatchedDate(watchedDate);
-                    entertainment.setRating(rating);
-                    dataSource.addEntertainment(entertainment);
-                    i++;
-                }
-            } catch (Exception e) {
-                int row = i;
-                e.printStackTrace();
-            }
+            importFromCSV();
         } else if (id == R.id.action_delete_all) {
-            EntertainmentDataSource dataSource = EntertainmentLocalDatasource.getInstance(this);
-            dataSource.deleteAll();
+            EntertainmentLocalDatasource.getInstance(this).deleteAll();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -117,6 +95,28 @@ public class ListEntertainmentsActivity
                 addNewEntertainment();
             }
         });
+    }
+
+    private void importFromCSV() {
+        try {
+            InputStream inputStream = getResources().openRawResource(R.raw.movies);
+            CSVFile csvFile = new CSVFile(inputStream);
+            List<String[]> moviesList = csvFile.read();
+            DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+            EntertainmentDataSource dataSource = EntertainmentLocalDatasource.getInstance(this);
+            for (String[] row : moviesList) {
+                Date watchedDate = formatter.parse(row[0]);
+                String title = row[1];
+                Float rating = Float.parseFloat(row[3]);
+                Entertainment entertainment = new Entertainment(title);
+                entertainment.setType(EntertainmentType.MOVIE);
+                entertainment.setWatchedDate(watchedDate);
+                entertainment.setRating(rating);
+                dataSource.addEntertainment(entertainment);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setupMoviesList() {
