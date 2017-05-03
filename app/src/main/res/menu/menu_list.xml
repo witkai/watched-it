@@ -7,4 +7,14 @@
         android:orderInCategory="100"
         android:title="@string/action_about"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_import"
+        android:orderInCategory="100"
+        android:title="Import Movies"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_delete_all"
+        android:orderInCategory="100"
+        android:title="Delete All"
+        app:showAsAction="never" />
 </menu>

@@ -118,4 +118,11 @@ public class EntertainmentLocalDatasource implements EntertainmentDataSource {
 
         return entertainments;
     }
+
+    @Override
+    public void deleteAll() {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        db.delete(PersistenceContract.WatchedDateTable.TABLE_NAME, null, null);
+        db.delete(PersistenceContract.EntertainmentTable.TABLE_NAME, null, null);
+    }
 }

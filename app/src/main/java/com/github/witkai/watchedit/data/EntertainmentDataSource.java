@@ -14,4 +14,6 @@ public interface EntertainmentDataSource {
     void addWatchedDate(@NonNull Long movieId, @NonNull Date date);
 
     List<Entertainment> allEntertainments();
+
+    void deleteAll();
 }

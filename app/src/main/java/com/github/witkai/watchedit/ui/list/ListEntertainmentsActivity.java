@@ -28,7 +28,9 @@ import com.github.witkai.watchedit.R;
 import com.github.witkai.watchedit.data.EntertainmentDataSource;
 import com.github.witkai.watchedit.data.local.EntertainmentLocalDatasource;
 import com.github.witkai.watchedit.ui.add.AddEntertainmentActivity;
+import com.github.witkai.watchedit.util.CSVFile;
 
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,7 +41,9 @@ public class ListEntertainmentsActivity
         extends AppCompatActivity
         implements EntertainmentsNavigator {
 
+    private static final String TAG = ListEntertainmentsActivity.class.getSimpleName();
     private RecyclerView mMoviesList;
+    private int i = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,31 @@ public class ListEntertainmentsActivity
         if (id == R.id.action_about) {
             showAboutDialog();
             return true;
+        } else if (id == R.id.action_import) {
+            try {
+                InputStream inputStream = getResources().openRawResource(R.raw.movies);
+                CSVFile csvFile = new CSVFile(inputStream);
+                List<String[]> moviesList = csvFile.read();
+                DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                EntertainmentDataSource dataSource = EntertainmentLocalDatasource.getInstance(this);
+                for (String[] row : moviesList) {
+                    Date watchedDate = formatter.parse(row[0]);
+                    String title = row[1];
+                    Float rating = Float.parseFloat(row[3]);
+                    Entertainment entertainment = new Entertainment(title);
+                    entertainment.setType(EntertainmentType.MOVIE);
+                    entertainment.setWatchedDate(watchedDate);
+                    entertainment.setRating(rating);
+                    dataSource.addEntertainment(entertainment);
+                    i++;
+                }
+            } catch (Exception e) {
+                int row = i;
+                e.printStackTrace();
+            }
+        } else if (id == R.id.action_delete_all) {
+            EntertainmentDataSource dataSource = EntertainmentLocalDatasource.getInstance(this);
+            dataSource.deleteAll();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -147,7 +176,6 @@ public class ListEntertainmentsActivity
         public RowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_row, parent, false);
-
             return new RowViewHolder(itemView);
         }
 
