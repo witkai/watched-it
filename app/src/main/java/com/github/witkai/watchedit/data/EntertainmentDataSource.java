@@ -16,4 +16,6 @@ public interface EntertainmentDataSource {
     List<Entertainment> allEntertainments();
 
     void deleteAll();
+
+    Entertainment getEntertainment(@NonNull Long id);
 }

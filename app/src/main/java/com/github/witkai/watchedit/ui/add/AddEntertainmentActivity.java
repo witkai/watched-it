@@ -37,20 +37,24 @@ public class AddEntertainmentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_movie);
+        setContentView(R.layout.activity_add);
+        setupToolbar();
+        setupForm();
+        setupCalendar();
+    }
+
+    private void setupForm() {
         mTitle = (EditText) findViewById(R.id.titleEdit);
         mRatingBar = (RatingBar) findViewById(R.id.ratingBar);
         mNotes = (EditText) findViewById(R.id.notesText);
         mMovieType = (RadioButton) findViewById(R.id.movieType);
         mTvShowType = (RadioButton) findViewById(R.id.tvShowType);
-        setupToolbar();
-        setupCalendar();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_add_movie, menu);
+        inflater.inflate(R.menu.menu_add, menu);
         return true;
     }
 

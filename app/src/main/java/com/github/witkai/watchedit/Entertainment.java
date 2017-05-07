@@ -55,7 +55,7 @@ public class Entertainment {
         this.type = type;
     }
 
-    public String getNote() {
+    public String getNotes() {
         return note;
     }
 

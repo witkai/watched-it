@@ -17,4 +17,7 @@
         <item>Play</item>
         <item>Comedy</item>
     </string-array>
+    <string name="title_activity_view_entertainment">ViewEntertainmentActivity</string>
+    <string name="save">Save</string>
+    <string name="edit">Edit</string>
 </resources>

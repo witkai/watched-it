@@ -49,7 +49,7 @@ public class EntertainmentLocalDatasource implements EntertainmentDataSource {
                 entertainment.getType());
         values.put(
                 PersistenceContract.EntertainmentTable.COLUMN_NAME_NOTE,
-                entertainment.getNote());
+                entertainment.getNotes());
         values.put(
                 PersistenceContract.EntertainmentTable.COLUMN_NAME_RATING,
                 entertainment.getRating());
@@ -82,7 +82,7 @@ public class EntertainmentLocalDatasource implements EntertainmentDataSource {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         String entertainmentTableName = PersistenceContract.EntertainmentTable.TABLE_NAME;
         String watchedDateTableName = PersistenceContract.WatchedDateTable.TABLE_NAME;
-        String query = "SELECT e.title,e.type,e.rating,d.date"
+        String query = "SELECT e._ID,e.title,e.type,e.rating,d.date"
                 + " FROM " + entertainmentTableName + " e"
                 + " INNER JOIN " + watchedDateTableName + " d"
                 + " ON e._ID = d." + PersistenceContract.WatchedDateTable.COLUMN_NAME_ENTERTAINMENT_ID
@@ -93,24 +93,7 @@ public class EntertainmentLocalDatasource implements EntertainmentDataSource {
         List<Entertainment> entertainments = new ArrayList<>();
 
         while (cursor.moveToNext()) {
-            String title = cursor.getString(
-                    cursor.getColumnIndexOrThrow(
-                            PersistenceContract.EntertainmentTable.COLUMN_NAME_TITLE));
-            int type = cursor.getInt(
-                    cursor.getColumnIndexOrThrow(
-                            PersistenceContract.EntertainmentTable.COLUMN_NAME_TYPE));
-            long watchedDate = cursor.getLong(
-                    cursor.getColumnIndexOrThrow(
-                            PersistenceContract.WatchedDateTable.COLUMN_NAME_DATE));
-            float rating = cursor.getFloat(
-                    cursor.getColumnIndexOrThrow(
-                            PersistenceContract.EntertainmentTable.COLUMN_NAME_RATING));
-
-            Entertainment entertainment = new Entertainment(title);
-            entertainment.setType(type);
-            entertainment.setRating(rating);
-            entertainment.setWatchedDate(new Date(watchedDate));
-
+            Entertainment entertainment = getEntertainment(cursor);
             entertainments.add(entertainment);
         }
 
@@ -124,5 +107,51 @@ public class EntertainmentLocalDatasource implements EntertainmentDataSource {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         db.delete(PersistenceContract.WatchedDateTable.TABLE_NAME, null, null);
         db.delete(PersistenceContract.EntertainmentTable.TABLE_NAME, null, null);
+    }
+
+    @Override
+    public Entertainment getEntertainment(@NonNull Long id) {
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        String query = "SELECT e._ID,e.title,e.type,e.rating,e.note,d.date"
+                + " FROM " + PersistenceContract.EntertainmentTable.TABLE_NAME + " e"
+                + " INNER JOIN " + PersistenceContract.WatchedDateTable.TABLE_NAME + " d"
+                + " ON e._ID = d." + PersistenceContract.WatchedDateTable.COLUMN_NAME_ENTERTAINMENT_ID
+                + " WHERE e._ID = " + id;
+        String[] args = {};
+        Cursor cursor = db.rawQuery(query, args);
+        cursor.moveToFirst();
+
+        Entertainment entertainment = getEntertainment(cursor);
+        // add note
+        String note = cursor.getString(
+                cursor.getColumnIndexOrThrow(
+                        PersistenceContract.EntertainmentTable.COLUMN_NAME_NOTE));
+        entertainment.setNote(note);
+
+        return entertainment;
+    }
+
+    private Entertainment getEntertainment(Cursor cursor) {
+        long id = cursor.getLong(0);
+        String title = cursor.getString(
+                cursor.getColumnIndexOrThrow(
+                        PersistenceContract.EntertainmentTable.COLUMN_NAME_TITLE));
+        int type = cursor.getInt(
+                cursor.getColumnIndexOrThrow(
+                        PersistenceContract.EntertainmentTable.COLUMN_NAME_TYPE));
+        long watchedDate = cursor.getLong(
+                cursor.getColumnIndexOrThrow(
+                        PersistenceContract.WatchedDateTable.COLUMN_NAME_DATE));
+        float rating = cursor.getFloat(
+                cursor.getColumnIndexOrThrow(
+                        PersistenceContract.EntertainmentTable.COLUMN_NAME_RATING));
+
+        Entertainment entertainment = new Entertainment(title);
+        entertainment.setId(id);
+        entertainment.setType(type);
+        entertainment.setRating(rating);
+        entertainment.setWatchedDate(new Date(watchedDate));
+
+        return entertainment;
     }
 }
