@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import com.github.witkai.watchedit.R;
 import com.github.witkai.watchedit.data.EntertainmentDataSource;
 import com.github.witkai.watchedit.data.local.EntertainmentLocalDatasource;
 import com.github.witkai.watchedit.ui.add.AddEntertainmentActivity;
+import com.google.android.youtube.player.YouTubeIntents;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -33,6 +35,12 @@ public class ViewEntertainmentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view);
         setupToolbar();
         loadEntertainment();
+        findViewById(R.id.youtube).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                watchTrailerOnYoutube();
+            }
+        });
     }
 
     @Override
@@ -103,10 +111,8 @@ public class ViewEntertainmentActivity extends AppCompatActivity {
     }
 
     private void watchTrailerOnYoutube() {
-        Intent intent = new Intent(Intent.ACTION_SEARCH);
-        intent.setPackage("com.google.android.youtube");
-        intent.putExtra("query", mEntertainment.getTitle() + " trailer");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        String searchQuery = mEntertainment.getTitle() + " trailer";
+        Intent intent = YouTubeIntents.createSearchIntent(this, searchQuery);
         startActivity(intent);
     }
 }
